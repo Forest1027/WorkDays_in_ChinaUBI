@@ -1,4 +1,4 @@
-# ArrayList源码分析
+# ArrayList源码分析 JDK1.7
 
 根据分析源码可知，ArrayList内部维护了一个数组elementData，根据需要对其扩容等
 
