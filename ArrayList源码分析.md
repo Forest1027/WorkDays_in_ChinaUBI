@@ -194,7 +194,7 @@ public class ArrayList<E> extends AbstractList<E>
     }
 
     private void ensureCapacityInternal(int minCapacity) {
-        //如果内置数组为空数组，将其容量定义为默认值——10
+        //elementData==EMPTY_ELEMENTDATA为true的情况是，在创建ArrayList对象时未指定初始容量。此时会将容量扩为10（默认容量）
         if (elementData == EMPTY_ELEMENTDATA) {
             minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);
         }
