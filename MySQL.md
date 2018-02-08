@@ -70,5 +70,8 @@ AND FIND_IN_SET(c2.code_detail_value  , c3.coupon_range)
 GROUP BY c3.coupon_id
 ```
 
+**[使用explain优化sql语句](https://www.jianshu.com/p/73f2c8448722)**
+
+
 
 
