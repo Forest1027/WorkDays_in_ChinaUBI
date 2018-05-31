@@ -77,33 +77,33 @@ GROUP BY c3.coupon_id
 
 1. 索引
 
-        创建了索引，不一定会走索引。如下：
+创建了索引，不一定会走索引。如下：
 
-        ```sql
-        -- uc.user_id创建了索引，而此sql并不会走这个索引
+```sql
+-- uc.user_id创建了索引，而此sql并不会走这个索引
+SELECT  tc.coupon_id ,tc.coupon_money ,uc.order_id ,u.tel,uc.user_id
+FROM biz_pj_9999.tp_user_coupon uc
+LEFT  JOIN biz_pj_9999.tp_coupon tc ON tc.coupon_id= uc.coupon_id
+LEFT JOIN biz_pj_9999.tp_user u  on u.user_id = uc.user_id
+
+-- 除非加了where筛选。下面的sql就可以走索引
+SELECT  tc.coupon_id ,tc.coupon_money ,uc.order_id ,u.tel,uc.user_id
+FROM biz_pj_9999.tp_user_coupon uc
+LEFT  JOIN biz_pj_9999.tp_coupon tc ON tc.coupon_id= uc.coupon_id
+LEFT JOIN biz_pj_9999.tp_user u  on u.user_id = uc.user_id
+WHERE uc.user_id = 1
+
+-- 另外，当此语句查询结果作为关联表又被leftjoin的情况，即使没有where筛选，索引也会生效 
+SELECT card.fk_oil_card_id ,card.card_type ,card.fk_oil_card_no as oil_card_no ,card.status,user_coupon.tel as device_id ,user_coupon.coupon_money from biz_pj_9999.tp_fk_oil_card card
+LEFT JOIN (
+        -- 此处的语句是上面的例句
         SELECT  tc.coupon_id ,tc.coupon_money ,uc.order_id ,u.tel,uc.user_id
         FROM biz_pj_9999.tp_user_coupon uc
         LEFT  JOIN biz_pj_9999.tp_coupon tc ON tc.coupon_id= uc.coupon_id
         LEFT JOIN biz_pj_9999.tp_user u  on u.user_id = uc.user_id
+    ) user_coupon  ON user_coupon.user_id=card.user_id
 
-        -- 除非加了where筛选。下面的sql就可以走索引
-        SELECT  tc.coupon_id ,tc.coupon_money ,uc.order_id ,u.tel,uc.user_id
-        FROM biz_pj_9999.tp_user_coupon uc
-        LEFT  JOIN biz_pj_9999.tp_coupon tc ON tc.coupon_id= uc.coupon_id
-        LEFT JOIN biz_pj_9999.tp_user u  on u.user_id = uc.user_id
-        WHERE uc.user_id = 1
-
-        -- 另外，当此语句查询结果作为关联表又被leftjoin的情况，即使没有where筛选，索引也会生效 
-        SELECT card.fk_oil_card_id ,card.card_type ,card.fk_oil_card_no as oil_card_no ,card.status,user_coupon.tel as device_id ,user_coupon.coupon_money from biz_pj_9999.tp_fk_oil_card card
-        LEFT JOIN (
-                -- 此处的语句是上面的例句
-                SELECT  tc.coupon_id ,tc.coupon_money ,uc.order_id ,u.tel,uc.user_id
-                FROM biz_pj_9999.tp_user_coupon uc
-                LEFT  JOIN biz_pj_9999.tp_coupon tc ON tc.coupon_id= uc.coupon_id
-                LEFT JOIN biz_pj_9999.tp_user u  on u.user_id = uc.user_id
-            ) user_coupon  ON user_coupon.user_id=card.user_id
-
-        ```
+```
 
 2. left join
 
